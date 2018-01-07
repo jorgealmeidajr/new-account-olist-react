@@ -1,4 +1,6 @@
-.App { }
+.App {
+  
+}
 
 .App-logo {
   height: 80px;
@@ -16,5 +18,5 @@
 }
 
 .App-intro {
-  font-size: large;
+  background-color: #F5F5FB;
 }
