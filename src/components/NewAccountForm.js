@@ -7,6 +7,13 @@ import './NewAccountForm.css'
 
 export default class NewAccountForm extends Component {
 
+  state = {
+    name: '',
+    email: '',
+    password: '',
+    passwordConfirmation: ''
+  }
+
   render() {
     return (
       <div className='newAccountContainer'>
@@ -18,15 +25,36 @@ export default class NewAccountForm extends Component {
         <Form className='newAccountForm'>
           <FormGroup>
             <Label for="name">Nome Completo</Label>
-            <Input type="text" name="name" id="name" placeholder="" valid />
+            <Input 
+              type="text" 
+              id="name"
+              name="name" 
+              placeholder="" 
+              valid 
+              innerRef={input => this.name = input} />
           </FormGroup>
+
           <FormGroup>
             <Label for="email">Email</Label>
-            <Input type="email" name="email" id="email" placeholder="" valid={false} />
+            <Input 
+              type="email" 
+              id="email" 
+              name="email" 
+              placeholder="" 
+              valid={false}
+              innerRef={input => this.email = input}
+              onChange={e => {console.log(e.target.value)}} />
           </FormGroup>
+
           <FormGroup>
             <Label for="password">Senha</Label>
-            <Input type="password" name="password" id="password" placeholder="" />
+            <Input 
+              type="password" 
+              id="password" 
+              name="password" 
+              placeholder=""
+              value={this.state.password}
+              onChange={e => {this.setState({password: e.target.value})}} />
           </FormGroup>
 
           <div>
@@ -41,16 +69,24 @@ export default class NewAccountForm extends Component {
 
           <FormGroup>
             <Label for="passwordConfirmation">Confirme a sua Senha</Label>
-            <Input type="password" name="passwordConfirmation" id="passwordConfirmation" placeholder="" />
+            <Input 
+              type="password" 
+              name="passwordConfirmation" 
+              id="passwordConfirmation" 
+              placeholder=""
+              value={this.state.passwordConfirmation}
+              onChange={e => {this.setState({passwordConfirmation: e.value})}} />
           </FormGroup>
+
+          {JSON.stringify(this.state)}
 
           <Button 
             size="lg" 
             block 
             style={{backgroundColor: '#17D499'}} 
-            active={false}
-            disabled={true}
-            onClick={(e) => e.preventDefault()}>Criar conta</Button>
+            active={true}
+            disabled={false}
+            onClick={(e) => { e.preventDefault(); console.log(this.name.value) }}>Criar conta</Button>
         </Form>
       </div>
     )
