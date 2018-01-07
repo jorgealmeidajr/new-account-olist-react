@@ -1,0 +1,26 @@
+
+.newAccountLogo {
+  height: 40px;
+}
+
+.newAccountContainer {
+  background-color: white;
+  width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.newAccountHeader {
+  padding: 20px 20px 0 20px;
+  text-align: center;
+}
+
+.newAccountForm {
+  padding: 40px 20px;
+}
+
+.newAccountBadge {
+  font-size: 16px;
+  width: 100%;
+  text-align: left;
+}
