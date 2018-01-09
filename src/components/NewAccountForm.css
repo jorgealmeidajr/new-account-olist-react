@@ -24,3 +24,11 @@
   width: 100%;
   text-align: left;
 }
+
+.password-danger {
+  color: #dc3545;
+}
+
+.password-success {
+  color: #28a745;
+}
