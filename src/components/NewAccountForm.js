@@ -11,7 +11,23 @@ export default class NewAccountForm extends Component {
     name: '',
     email: '',
     password: '',
-    passwordConfirmation: ''
+    passwordConfirmation: '',
+
+    nameTouched: false,
+    emailTouched: false,
+    passwordTouched: false,
+    passwordConfirmationTouched: false
+  }
+
+  isNameValid = name => (name.trim() !== '')
+
+  isEmailValid = email => (email.trim() !== '' && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
+
+  isAllFormValid = () => this.isNameValid(this.state.name) && this.isEmailValid(this.state.email)
+  
+  createAccountButtonClicked = (e) => {
+    e.preventDefault()
+    console.log(this.state)
   }
 
   render() {
@@ -30,8 +46,9 @@ export default class NewAccountForm extends Component {
               id="name"
               name="name" 
               placeholder="" 
-              valid 
-              innerRef={input => this.name = input} />
+              valid={(this.state.nameTouched) ? this.isNameValid(this.state.name) : undefined} 
+              value={this.state.name}
+              onChange={e => {this.setState({name: e.target.value, nameTouched: true})}} />
           </FormGroup>
 
           <FormGroup>
@@ -41,9 +58,9 @@ export default class NewAccountForm extends Component {
               id="email" 
               name="email" 
               placeholder="" 
-              valid={false}
-              innerRef={input => this.email = input}
-              onChange={e => {console.log(e.target.value)}} />
+              valid={(this.state.emailTouched) ? this.isEmailValid(this.state.email) : undefined} 
+              value={this.state.email}
+              onChange={e => {this.setState({email: e.target.value, emailTouched: true})}} />
           </FormGroup>
 
           <FormGroup>
@@ -60,6 +77,9 @@ export default class NewAccountForm extends Component {
           <div>
             <Progress value={(100 / 3) * 2} color='success' />
             <div>
+              <i className="fa fa-circle"></i>Pelo menos 6 caracteres<br />
+              <i className="fa fa-check-circle"></i>
+              <i className="fa fa-times-circle"></i>
               <Badge color="secondary" className='newAccountBadge'>Pelo menos 6 caracteres</Badge><br />
               <Badge color="danger" className='newAccountBadge'>Pelo menos 1 letra maiúscula</Badge><br />
               <Badge color="success" className='newAccountBadge'>Pelo menos 1 número</Badge>
@@ -75,18 +95,18 @@ export default class NewAccountForm extends Component {
               id="passwordConfirmation" 
               placeholder=""
               value={this.state.passwordConfirmation}
-              onChange={e => {this.setState({passwordConfirmation: e.value})}} />
+              onChange={e => {this.setState({passwordConfirmation: e.target.value})}} />
           </FormGroup>
 
-          {JSON.stringify(this.state)}
+          {JSON.stringify(this.state, null, 2)}
 
           <Button 
             size="lg" 
             block 
             style={{backgroundColor: '#17D499'}} 
-            active={true}
-            disabled={false}
-            onClick={(e) => { e.preventDefault(); console.log(this.name.value) }}>Criar conta</Button>
+            active={this.isAllFormValid()}
+            disabled={!this.isAllFormValid()}
+            onClick={this.createAccountButtonClicked}>Criar conta</Button>
         </Form>
       </div>
     )
