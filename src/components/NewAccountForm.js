@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react'
 
-import { Form, FormGroup, Label, Input, Button, Progress, Badge } from 'reactstrap'
+import { Form, FormGroup, Label, Input, Button, Progress } from 'reactstrap'
 
 import './NewAccountForm.css'
 
@@ -32,10 +32,15 @@ export default class NewAccountForm extends Component {
   isEmailValid = email => (email.trim() !== '' && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
 
   isPasswordValid = password => (passwordValidator.checkLength(password) 
-    && passwordValidator.hasOneLetterUppercase(password) && passwordValidator.hasOneNumber(password))
+    && passwordValidator.hasOneLetterUppercase(password) 
+    && passwordValidator.hasOneNumber(password))
 
-  isAllFormValid = () => this.isNameValid(this.state.name) && this.isEmailValid(this.state.email) 
-    && this.isPasswordValid(this.state.password)
+  isConfirmationPasswordValid = (password, confirmation) => (password === confirmation)
+
+  isAllFormValid = () => this.isNameValid(this.state.name) 
+    && this.isEmailValid(this.state.email) 
+    && this.isPasswordValid(this.state.password) 
+    && this.isConfirmationPasswordValid(this.state.password, this.state.passwordConfirmation)
 
   getClassPasswordRule1 = () => {
     if(!this.state.passwordTouched) 
@@ -164,8 +169,9 @@ export default class NewAccountForm extends Component {
               name="passwordConfirmation" 
               id="passwordConfirmation" 
               placeholder=""
+              valid={(this.state.passwordConfirmationTouched) ? this.isConfirmationPasswordValid(this.state.password, this.state.passwordConfirmation) : undefined} 
               value={this.state.passwordConfirmation}
-              onChange={e => {this.setState({passwordConfirmation: e.target.value})}} />
+              onChange={e => {this.setState({passwordConfirmation: e.target.value, passwordConfirmationTouched: true})}} />
           </FormGroup>
 
           <Button 
