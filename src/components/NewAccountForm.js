@@ -5,13 +5,8 @@ import { Form, FormGroup, Label, Input, Button, Progress } from 'reactstrap'
 
 import './NewAccountForm.css'
 
-const passwordValidator = {
-  checkLength: (email) => email.length >= 6,
+import AccountValidator from './AccountValidator'
 
-  hasOneNumber: (email) => /\d{1}/.test(email),
-
-  hasOneLetterUppercase: (email) => /[A-Z]{1}/.test(email)
-}
 
 export default class NewAccountForm extends Component {
 
@@ -27,26 +22,16 @@ export default class NewAccountForm extends Component {
     passwordConfirmationTouched: false
   }
 
-  isNameValid = name => (name.trim() !== '')
-
-  isEmailValid = email => (email.trim() !== '' && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
-
-  isPasswordValid = password => (passwordValidator.checkLength(password) 
-    && passwordValidator.hasOneLetterUppercase(password) 
-    && passwordValidator.hasOneNumber(password))
-
-  isConfirmationPasswordValid = (password, confirmation) => (password === confirmation)
-
-  isAllFormValid = () => this.isNameValid(this.state.name) 
-    && this.isEmailValid(this.state.email) 
-    && this.isPasswordValid(this.state.password) 
-    && this.isConfirmationPasswordValid(this.state.password, this.state.passwordConfirmation)
+  isAllFormValid = () => AccountValidator.isNameValid(this.state.name) 
+    && AccountValidator.isEmailValid(this.state.email) 
+    && AccountValidator.isPasswordValid(this.state.password) 
+    && AccountValidator.isConfirmationPasswordValid(this.state.password, this.state.passwordConfirmation)
 
   getClassPasswordRule1 = () => {
     if(!this.state.passwordTouched) 
       return 'fa-circle'
 
-    if(passwordValidator.checkLength(this.state.password)) {
+    if(AccountValidator.checkPasswordLength(this.state.password)) {
       return 'fa-check-circle password-success'
     } else {
       return 'fa-times-circle password-danger'
@@ -57,7 +42,7 @@ export default class NewAccountForm extends Component {
     if(!this.state.passwordTouched) 
       return 'fa-circle'
 
-    if(passwordValidator.hasOneLetterUppercase(this.state.password)) {
+    if(AccountValidator.passwordHasOneLetterUppercase(this.state.password)) {
       return 'fa-check-circle password-success'
     } else {
       return 'fa-times-circle password-danger'
@@ -68,29 +53,15 @@ export default class NewAccountForm extends Component {
     if(!this.state.passwordTouched) 
       return 'fa-circle'
 
-    if(passwordValidator.hasOneNumber(this.state.password)) {
+    if(AccountValidator.passwordHasOneNumber(this.state.password)) {
       return 'fa-check-circle password-success'
     } else {
       return 'fa-times-circle password-danger'
     }
   }
 
-  getPasswordProgress = password => {
-    let progress = 0
-
-    if(passwordValidator.checkLength(password)) progress++
-
-    if(passwordValidator.hasOneLetterUppercase(password)) progress++
-    
-    if(passwordValidator.hasOneNumber(password)) progress++
-
-    return progress
-  }
-
-  getPasswordProgressValue = (password) => (this.getPasswordProgress(password) * (100 / 3))
-  
   getPasswordProgressColor = (password) => {
-    let progress = this.getPasswordProgress(password)
+    let progress = AccountValidator.getPasswordProgress(password)
 
     if(progress === 1) return 'danger'
 
@@ -120,7 +91,7 @@ export default class NewAccountForm extends Component {
               id="name"
               name="name" 
               placeholder="" 
-              valid={(this.state.nameTouched) ? this.isNameValid(this.state.name) : undefined} 
+              valid={(this.state.nameTouched) ? AccountValidator.isNameValid(this.state.name) : undefined} 
               value={this.state.name}
               onChange={e => {this.setState({name: e.target.value, nameTouched: true})}} />
           </FormGroup>
@@ -132,7 +103,7 @@ export default class NewAccountForm extends Component {
               id="email" 
               name="email" 
               placeholder="" 
-              valid={(this.state.emailTouched) ? this.isEmailValid(this.state.email) : undefined} 
+              valid={(this.state.emailTouched) ? AccountValidator.isEmailValid(this.state.email) : undefined} 
               value={this.state.email}
               onChange={e => {this.setState({email: e.target.value, emailTouched: true})}} />
           </FormGroup>
@@ -144,14 +115,14 @@ export default class NewAccountForm extends Component {
               id="password" 
               name="password" 
               placeholder=""
-              valid={(this.state.passwordTouched) ? this.isPasswordValid(this.state.password) : undefined} 
+              valid={(this.state.passwordTouched) ? AccountValidator.isPasswordValid(this.state.password) : undefined} 
               value={this.state.password}
               onChange={e => {this.setState({password: e.target.value, passwordTouched: true})}} />
           </FormGroup>
 
           <div>
             <Progress 
-              value={this.getPasswordProgressValue(this.state.password)} 
+              value={AccountValidator.getPasswordProgressValue(this.state.password)} 
               color={this.getPasswordProgressColor(this.state.password)} />
             
             <div>
@@ -169,7 +140,7 @@ export default class NewAccountForm extends Component {
               name="passwordConfirmation" 
               id="passwordConfirmation" 
               placeholder=""
-              valid={(this.state.passwordConfirmationTouched) ? this.isConfirmationPasswordValid(this.state.password, this.state.passwordConfirmation) : undefined} 
+              valid={(this.state.passwordConfirmationTouched) ? AccountValidator.isConfirmationPasswordValid(this.state.password, this.state.passwordConfirmation) : undefined} 
               value={this.state.passwordConfirmation}
               onChange={e => {this.setState({passwordConfirmation: e.target.value, passwordConfirmationTouched: true})}} />
           </FormGroup>
